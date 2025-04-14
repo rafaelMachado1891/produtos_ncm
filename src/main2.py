@@ -1,13 +1,44 @@
-import pandas as pd
+import requests
 
-df= pd.read_csv('../dados/EXP_2024.csv',sep=";")
+url = "https://api-comexstat.mdic.gov.br/general"
 
-NCM = ['49029000''82119400''85392910''94051190''94052900''94054900''94059200']
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+}
 
-linhas_filtradas =  df['CO_NCM'].isin(NCM)
+payload = {
+    "flow": "import",
+    "monthDetail": True,
+    "period": {
+        "from": "2023-01",
+        "to": "2024-12"
+    },
+    "filters": [
+        {
+            "filter": "economicBlock",
+            "values": [111]
+        },
+        
+        {
+            "filter": "ncm",
+            "values": ["94051190"]
+            
+        }
+    ],
+    "details": ["country", "state", "ncm"],
+    "metrics": [
+        "metricFOB",
+        "metricKG",
+        "metricStatistic",
+        "metricFreight",
+        "metricInsurance",
+        "metricCIF"
+    ]
+}
 
-print(linhas_filtradas)
+response = requests.post(url, headers=headers, json=payload, verify=False)
 
-df = df[linhas_filtradas]
-
-print(df)
+# Verificando a resposta
+print(response.status_code)
+print(response.json())  # Se a resposta for JSON
