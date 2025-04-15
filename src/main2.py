@@ -1,4 +1,6 @@
 import requests
+import pandas as pd
+import json
 
 url = "https://api-comexstat.mdic.gov.br/general"
 
@@ -17,7 +19,7 @@ payload = {
     "filters": [
         {
             "filter": "economicBlock",
-            "values": [111]
+           "values": [111]
         },
         
         {
@@ -26,7 +28,7 @@ payload = {
             
         }
     ],
-    "details": ["country", "state", "ncm",],
+    "details": ["country", "state","ncm"],
     "metrics": [
         "metricFOB",
         "metricKG",
@@ -39,6 +41,15 @@ payload = {
 
 response = requests.post(url, headers=headers, json=payload, verify=False)
 
-# Verificando a resposta
+dados = response.json()
+
+lista = dados["data"]["list"]
+
+pd.set_option('display.max_columns', None)
+
+df = pd.DataFrame(lista)
+
+
 print(response.status_code)
-print(response.json())  # Se a resposta for JSON
+print(df)  
+print(df.dtypes)
