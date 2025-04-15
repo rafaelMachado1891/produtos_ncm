@@ -26,7 +26,7 @@ payload = {
             
         }
     ],
-    "details": ["country", "state", "ncm"],
+    "details": ["country", "state", "ncm",],
     "metrics": [
         "metricFOB",
         "metricKG",
